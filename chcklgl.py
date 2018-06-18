@@ -1,6 +1,7 @@
 
 
 def checkLegal(board, turn):
+    legal = True
     #check nifu
     for filen in range(9):
         if [line[filen] for line in board].count("P")>1:
@@ -169,4 +170,142 @@ def checkLegal(board, turn):
             elif board[klinen+i][kfilen-i] != "":
                 break
 
+    elif turn == "sente":
+        for linen in range(9):
+             if "k" in board[linen]:
+                 kfilen = board[linen].index("k")
+                 klinen = linen
+                 break
+        if klinen < 7 :
+            #check knight's check
+            if kfilen == 8:
+                if board[klinen+2][kfilen-1] == "N":
+                    legal = False
+                    print "knight is checking to gote"
+            elif kfilen == 0:
+                if board[klinen+2][kfilen+1] == "N":
+                    legal = False
+                    print "knight is checking to gote"
+            else:
+                if board[klinen+2][kfilen-1] == "N" or board[klinen+2][kfilen+1] == "N":
+                    legal = False
+                    print "knight is checking to gote"
+        if klinen != 8 :
+            #check king's front check
+            if board[klinen+1][kfilen] in ["P","L","S","G","K","R","+P","+L","+N","+S","+B","+R"]:
+                legal = False
+                print "{} is checking to gote from the front".format(board[klinen+1][kfilen])
+            if kfilen == 8:
+                if board[klinen+1][kfilen-1] in ["S","G","K","B","+P","+L","+N","+S","+B","+R"]:
+                    legal = False
+                    print "{} is checking to gote from the front right".format(board[klinen+1][kfilen-1])
+            elif kfilen == 0:
+                if board[klinen+1][kfilen+1] in ["S","G","K","B","+P","+L","+N","+S","+B","+R"]:
+                    legal = False
+                    print "{} is checking to gote from the front left".format(board[klinen+1][kfilen+1])
+            else:
+                if board[klinen+1][kfilen-1] in ["S","G","K","B","+P","+L","+N","+S","+B","+R"]:
+                    legal = False
+                    print "{} is checking to gote from the front right".format(board[klinen+1][kfilen-1])
+                if board[klinen+1][kfilen+1] in ["S","G","K","B","+P","+L","+N","+S","+B","+R"]:
+                    legal = False
+                    print "{} is checking to gote from the front left".format(board[klinen+1][kfilen+1])
 
+        if kfilen != 0:
+            #check king's right side
+            if board[klinen][kfilen-1] in ["G","K","R","+P","+L","+N","+S","+B","+R"]:
+                legal = False
+                print "{} is checking to gote from the right".format(board[klinen][kfilen-1])
+        if kfilen != 8:
+            #check king's left side
+            if board[klinen][kfilen+1] in ["G","K","R","+P","+L","+N","+S","+B","+R"]:
+                legal = False
+                print "{} is checking to gote from the left".format(board[klinen][kfilen+1])
+        if klinen != 0:
+            #check king's back
+            if board[klinen-1][kfilen] in ["G","K","R","+P","+L","+N","+S","+B","+R"]:
+                legal = False
+                print "{} is checking to gote from the back".format(board[klinen-1][kfilen])
+            if kfilen == 8:
+                if board[klinen-1][kfilen-1] in ["S","K","B","+B","+R"]:
+                    legal = False
+                    print "{} is checking to gote from the back right".format(board[klinen-1][kfilen-1])
+            elif kfilen == 0:
+                if board[klinen-1][kfilen+1] in ["S","K","B","+B","+R"]:
+                    legal = False
+                    print "{} is checking to gote from the back left".format(board[klinen-1][kfilen+1])
+            else:
+                if board[klinen-1][kfilen-1] in ["S","K","B","+B","+R"]:
+                    legal = False
+                    print "{} is checking to gote from the back right".format(board[klinen-1][kfilen-1])
+                if board[klinen-1][kfilen+1] in ["S","K","B","+B","+R"]:
+                    legal = False
+                    print "{} is checking to gote from the back left".format(board[klinen-1][kfilen+1])
+        #check rook's check
+        for piece in reversed(board[klinen][:kfilen]):
+            if piece == "R" or piece == "+R":
+                legal = False
+                print "rook is checking from the right"
+                break
+            elif piece != "":
+                break
+        for piece in board[klinen][kfilen+1:]:
+            if piece == "R" or piece == "+R":
+                legal = False
+                print "rook is checking from the left"
+                break
+            elif piece != "":
+                break
+        for piece in reversed([line[kfilen] for line in board][:klinen]):
+            if piece == "R" or piece == "+R":
+                legal = False
+                print "rook is checking from the front"
+                break
+            elif piece != "":
+                break
+        for piece in [line[kfilen] for line in board][klinen+1:]:
+            if piece == "R" or piece == "+R":
+                legal = False
+                print "rook is checking from the back"
+                break
+            elif piece != "":
+                break
+        #check bishop's check #the hardest part
+        for i in range(1,9):
+            if kfilen+i > 8 or klinen+i > 8:
+                break
+            if board[klinen+i][kfilen+i] == "B" or board[klinen+i][kfilen+i] == "+B":
+                legal = False
+                print "bishop is checking from the back left"
+                break
+            elif board[klinen+i][kfilen+i] != "":
+                break
+        for i in range(1,9):
+            if kfilen-i < 0 or klinen-i < 0:
+                break
+            if board[klinen-i][kfilen-i] == "B" or board[klinen-i][kfilen-i] == "+B":
+                legal = False
+                print "bishop is checking from the front right"
+                break
+            elif board[klinen-i][kfilen-i] != "":
+                break
+        for i in range(1,9):
+            if kfilen+i > 8 or klinen-i < 0:
+                break
+            if board[klinen-i][kfilen+i] == "B" or board[klinen-i][kfilen+i] == "+B":
+                legal = False
+                print "bishop is checking from the front left"
+                break
+            elif board[klinen-i][kfilen+i] != "":
+                break
+        for i in range(1,9):
+            if kfilen-i < 0 or klinen+i > 8:
+                break
+            if board[klinen+i][kfilen-i] == "B" or board[klinen+i][kfilen-i] == "+B":
+                legal = False
+                print "bishop is checking from the back right"
+                break
+            elif board[klinen+i][kfilen-i] != "":
+                break
+
+    return legal
