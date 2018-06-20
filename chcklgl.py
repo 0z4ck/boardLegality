@@ -119,9 +119,9 @@ def checkLegal(board, turn):
             elif piece != "":
                 break
         for piece in reversed([line[kfilen] for line in board][:klinen]):
-            if piece == "r" or piece == "+r":
+            if piece == "r" or piece == "+r" or piece == "l":
                 legal = False
-                print "rook is checking from the front"
+                print "rook or lance is checking from the front"
                 break
             elif piece != "":
                 break
@@ -257,9 +257,9 @@ def checkLegal(board, turn):
             elif piece != "":
                 break
         for piece in reversed([line[kfilen] for line in board][:klinen]):
-            if piece == "R" or piece == "+R":
+            if piece == "R" or piece == "+R" or piece == "L":
                 legal = False
-                print "rook is checking from the front"
+                print "rook or lance is checking from the front"
                 break
             elif piece != "":
                 break
